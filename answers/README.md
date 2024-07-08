@@ -149,19 +149,27 @@ Logging libraries offer features like different logging levels (error, warning, 
 Logs can be formatted to include additional information like timestamps, thread names, and custom details.
 Logs can be directed to different destinations based on their severity or purpose.
 
-:white_check_mark: 2-using logging add - error Compare the formatting in the logs
-
+:white_check_mark: 1-What it the difference between `print` and `logging` ?
+```
 <TODO>
+```
+
+:white_check_mark: 2-What is the difference when you use `logging.error` ?
+```
+<TODO>
+```
 
 :white_check_mark: 3-How do you combine string and a value in the logging ?
 ```
     logging.info(f"{string_to_log} Goodbye!")
 ```
+
 f-string info and example: [here](https://builtin.com/data-science/python-f-string)
 
-:white_check_mark: 4-Modify the code so create_first_string return a string and final_string_log print it.
-
+4-Modify the code so `create_first_string` return a string and `final_string_log` log it.
+```
 <TODO>
+```
 
 :white_check_mark: 5-Why do you need to break code into task in Airflow?
 

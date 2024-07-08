@@ -71,7 +71,6 @@ Play and modify the `Operator name`, `task_id` and the `python_callable` to full
 
 :pencil2: 1-What it the difference between `print` and `logging` ?
 
-:pencil2: 2-using logging add - error
 Compare the formatting in the logs
 ```
     beginning_string = "Hello World!"
@@ -79,7 +78,7 @@ Compare the formatting in the logs
     logging.info(beginning_string)
 ```
 
-what is the difference when you use `logging.error`?
+:pencil2: 2-What is the difference when you use `logging.error` ?
 ```
     beginning_string = "Hello World!"
     logging.error(beginning_string)
@@ -93,7 +92,7 @@ How to simplify the line below in only 1 line:
     logging.info(string_to_log)
 ```
 
-:pencil2: 4-Modify the code so `create_first_string` return a string and `final_string_log` print it.
+:pencil2: 4-Modify the code so `create_first_string` return a string and `final_string_log` log it.
 
 :pencil2: 5-Why do you need to break code into task in Airflow?
 
