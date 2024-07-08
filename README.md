@@ -7,11 +7,11 @@ This approach will break down the core components into manageable steps and make
 
 Follow the First steps below
 
-Exercice can be found in this page: [questions](https://github.com/80auline/airflow-discovery/blob/infrastructure-set-up/dags/README.md)
+Exercice can be found in this page: [questions](https://github.com/80auline/airflow-discovery/blob/main/dags/README.md)
 
-Each exercise refers to a specific [dags](https://github.com/80auline/airflow-discovery/tree/infrastructure-set-up/dags), prefix with the name of the exercise.
+Each exercise refers to a specific [dags](https://github.com/80auline/airflow-discovery/tree/main/dags), prefix with the name of the exercise.
 
-Answer to exercice can we found: [answers](https://github.com/80auline/airflow-discovery/tree/main/answers)
+Answer to exercice can we found: [answers](https://github.com/80auline/airflow-discovery/blob/main/answers/README.md)
 
 Feel free to use AI to speed up your learning but make sure to understand each concept. Ask the AI to quizz you too !
 
