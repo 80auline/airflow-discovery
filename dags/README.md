@@ -1,8 +1,8 @@
 # Questions: 1_my_first_airflow 
 
-1-What is the python type of Documentation ?
+:pencil2: 1-What is the python type of Documentation ?
 
-2-What are the main components of a Airflow Dag ?
+:pencil2: 2-What are the main components of a Airflow Dag ?
 
 3-Navigate to Airflow interface and find the embedded Airflow doc, tell me which part of the code is responsible for displaying it.
 
