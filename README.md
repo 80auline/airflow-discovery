@@ -18,8 +18,11 @@ Feel free to use AI to speed up your learning but make sure to understand each c
 ## First steps
 
 1- Make sure you have docker, python installed
+
 2- Download the repository
+
 3- Run `docker-compose up` and navigate to [http://localhost:8080/](http://localhost:8080/)
+
 4-Enter the login/password: airflow/airflow
 
 ## Can you have a look at my answers ?
