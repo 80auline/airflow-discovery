@@ -59,3 +59,20 @@ Play and modify the `Operator name`, `task_id` and the `python_callable` to full
 
 :pencil2: 10-Many jobs appearing in Airflow that are not yours (like `example_bash_decorator`). Find the parameters that turn off the example dags in the configs. (Hint: you may have to rebuild the image)
 
+# Questions: :snake: 2_passing_parameters_between_dags 
+
+:pencil2: 1-What it the difference between `print` and `logging` ?
+
+:pencil2: x-using logging add - error
+
+:pencil2: x-How do you combine string and a value in the logging.
+How to simplify the line below in only 1 line:
+```
+    message_to_log = "my message" + value
+    logging.info(message_to_log)
+```
+
+:pencil2: x-Why do you need to break code into task in Airflow?
+`1 dag with 1 big task vs 1 dag with multiple task` 
+
+
