@@ -41,9 +41,7 @@ dag.doc_md = __doc__
 :white_check_mark: 4-Trigger the dag and navigate to the logs, find what was printed in the job. Show all the logs.
 
 ```
-1e28794e2c6c
-*** Found local files:
-***   * /opt/airflow/logs/dag_id=1_my_first_dag/run_id=scheduled__2024-07-06T00:00:00+00:00/task_id=print_hello/attempt=1.log
+run_id=scheduled__2024-07-06T00:00:00+00:00/task_id=print_hello/attempt=1.log
 [2024-07-07, 02:54:05 UTC] {local_task_job_runner.py:120} ▶ Pre task execution logs
 [2024-07-07, 02:54:05 UTC] {1_my_first_airflow.py:16} INFO - Hello World!
 [2024-07-07, 02:54:05 UTC] {python.py:237} INFO - Done. Returned value was: None
@@ -84,7 +82,6 @@ print_goodbye = orange - upstream failed
 ```
 The dependent task is not execute due to failure upstream.
 
-def print_goodbye():
 
 :white_check_mark: 9-Naming convention, what it is and why it is useful ? 
 
@@ -110,7 +107,7 @@ task_id = print_hello
 python_callable = print_hello
 ```
 
-:white_check_mark: 10-Many jobs appearing in Airflow that are not yours (like `example_bash_decorator`). Find the parameters that turn off the example dags in the configs. (Hint: you may have to rebuild the image)
+:white_check_mark: 10-Many jobs appearing in Airflow that are not yours (like `example_bash_decorator`). Find the parameters that turn off the example dags in the configs.
 
 ```
 AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
