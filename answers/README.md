@@ -151,13 +151,17 @@ Logs can be directed to different destinations based on their severity or purpos
 
 :white_check_mark: 1-What it the difference between `print` and `logging` ?
 ```
-<TODO>
+[2024-07-08, 4:20:07 UTC] {logging_mixin.py:188} INFO - Hello World!
+[2024-07-08, 4:20:07 UTC] {2_passing_parameters_between_dags.py:17} INFO - Hello World!
 ```
 
 :white_check_mark: 2-What is the difference when you use `logging.error` ?
 ```
-<TODO>
+[2024-07-08, 18:22:27 UTC] {2_passing_parameters_between_dags.py:16} ERROR - Hello World!
 ```
+Using `logging.error` alone within an Airflow task doesn't necessarily cause the task to fail. Here's why:
+- Logging vs Exceptions:  logging.error is primarily used for recording error messages during program execution. It doesn't inherently trigger task failures. Exceptions, on the other hand, are designed to signal errors that halt program execution.
+- Airflow Task Operators:  Airflow tasks are typically implemented using operators like PythonOperator, BashOperator, etc. These operators capture the exit code of the underlying process (Python script, bash command, etc.) launched by the task.
 
 :white_check_mark: 3-How do you combine string and a value in the logging ?
 ```
