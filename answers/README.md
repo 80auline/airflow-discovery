@@ -54,10 +54,16 @@ dag.doc_md = __doc__
 
 :white_check_mark: 5-Change the scheduling of the dag, and set it up to run every Monday at 6am UTC.
 
+```
+schedule_interval="0 6 * * 1"
+```
+
 https://crontab.guru/every-monday
 
 :white_check_mark: 6-Turn the dag off, then trigger the Airflow job. 
 Did it trigger the job ?
+
+When triggering the job it automatically turn on the dag. You need to be careful to avoid clicking multiple times.
 
 
 :white_check_mark: 7-Dependencies: Modify the following line, what is the difference ? (Hint you will have to go to the Graph tab)
@@ -93,3 +99,6 @@ python_callable = print_hello
 
 :white_check_mark: 10-Many jobs appearing in Airflow that are not yours (like `example_bash_decorator`). Find the parameters that turn off the example dags in the configs. (Hint: you may have to rebuild the image)
 
+```
+AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+```
