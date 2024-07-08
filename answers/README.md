@@ -7,9 +7,7 @@
 - Comments
 - Logging
 
-Get more information with real life example: here
-
-https://realpython.com/documenting-python-code/
+Get more information with real life example: [here](https://realpython.com/documenting-python-code/)
 
 :white_check_mark: 2-What are the main components of an Airflow Dag ?
 
@@ -58,7 +56,8 @@ dag.doc_md = __doc__
 schedule_interval="0 6 * * 1"
 ```
 
-https://crontab.guru/every-monday
+Cron info [here](https://crontab.guru/every-monday)
+Airflow scheduling [here](https://airflow.apache.org/docs/apache-airflow/1.10.1/scheduler.html)
 
 :white_check_mark: 6-Turn the dag off, then trigger the Airflow job. 
 Did it trigger the job ?
@@ -68,10 +67,24 @@ When triggering the job it automatically turn on the dag. You need to be careful
 
 :white_check_mark: 7-Dependencies: Modify the following line, what is the difference ? (Hint you will have to go to the Graph tab)
 
+Dependency is removed between the 2 tasks, they will run in parallel.
 
 :white_check_mark: 8-Dag failure. 
 
+When added in function `print_goodbye()`
+```
+print_hello = green - successful
+print_goodbye = red - failed
+```
 
+When added in function `print_hello()`
+```
+print_hello = red - failed
+print_goodbye = orange - upstream failed
+```
+The dependent task is not execute due to failure upstream.
+
+def print_goodbye():
 
 :white_check_mark: 9-Naming convention, what it is and why it is useful ? 
 
