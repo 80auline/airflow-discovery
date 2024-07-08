@@ -5,7 +5,7 @@
 - Dag description
 - function description
 - Comments
-- logging
+- Logging
 
 Get more information with real life example: here
 
@@ -31,7 +31,8 @@ Top of the file:
 ```""" 
 Doc-string explaining was the job is doing
 \n My first Airflow job
-"""```
+"""
+```
 
 Middle of the file, after dag definition: 
 ```
