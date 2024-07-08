@@ -65,14 +65,28 @@ Play and modify the `Operator name`, `task_id` and the `python_callable` to full
 
 :pencil2: x-using logging add - error
 
-:pencil2: x-How do you combine string and a value in the logging.
+:pencil2: x-How do you combine string and a value in the logging ?
+
 How to simplify the line below in only 1 line:
 ```
-    message_to_log = "my message" + value
-    logging.info(message_to_log)
+    string_to_log = beginning_string + "Goodbye!"
+    logging.info(string_to_log)
 ```
 
+:pencil2: x-Modify the code so `create_first_string` return a string and `final_string_log` print it.
+
 :pencil2: x-Why do you need to break code into task in Airflow?
+
 `1 dag with 1 big task vs 1 dag with multiple task` 
+
+:pencil2: x-Can I use it for a really large dataframe for example ?
+
+
+:pencil2: x-Is it better to save it locally in a file, for a dataframe with `df.to_csv()` ?
+
+
+
+
+
 
 
