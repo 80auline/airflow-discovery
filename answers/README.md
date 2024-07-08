@@ -1,3 +1,10 @@
+ # Table of content:
+ - [Answers: :snake: 1_my_first_airflow ](#item-one)
+ - [Answers: :snake: 2_passing_parameters_between_dags ](#item-two)
+ 
+
+ 
+<a id="item-one"></a>
 # Answers: :snake: 1_my_first_airflow 
 
 :white_check_mark: 1-What are the different tyepe of python documentation ?
@@ -112,3 +119,95 @@ python_callable = print_hello
 ```
 AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
 ```
+
+<a id="item-two"></a>
+# Answers: :snake: 2_passing_parameters_between_dags 
+
+:white_check_mark: 1-What it the difference between `print` and `logging` ?
+
+**Print:**
+
+**Purpose**: Print is a simple function used for temporary output during development or debugging. It typically displays information directly to the console where you're running your program.
+**Use Cases**:
+Printing variable values or intermediate results to see how your code is behaving step-by-step.
+Checking if a specific part of your code is executing as expected.
+**Limitations**:
+Print statements are not meant to be part of the final production code. They can clutter the output and make it harder to read.
+Print statements don't offer any logging functionality, like recording timestamps or logging levels (e.g., error, warning, info).
+Information printed might be lost or difficult to track after the program finishes execution.
+
+**Logging:**
+
+**Purpose:** Logging is a more robust and structured way to record information about your program's execution. It typically writes messages to log files or other destinations like databases.
+**Use Cases:**
+Recording important events or errors that occur during program execution for later analysis.
+Tracking the performance of your program and identifying bottlenecks.
+Auditing user actions and program behavior for troubleshooting or security purposes.
+**Advantages:**
+Logs are persistent and can be reviewed even after the program finishes running.
+Logging libraries offer features like different logging levels (error, warning, info, debug) to categorize the importance of messages.
+Logs can be formatted to include additional information like timestamps, thread names, and custom details.
+Logs can be directed to different destinations based on their severity or purpose.
+
+:white_check_mark: 1-What it the difference between `print` and `logging` ?
+```
+[2024-07-08, 4:20:07 UTC] {logging_mixin.py:188} INFO - Hello World!
+[2024-07-08, 4:20:07 UTC] {2_passing_parameters_between_dags.py:17} INFO - Hello World!
+```
+
+:white_check_mark: 2-What is the difference when you use `logging.error` ?
+```
+[2024-07-08, 18:22:27 UTC] {2_passing_parameters_between_dags.py:16} ERROR - Hello World!
+```
+Using `logging.error` alone within an Airflow task doesn't necessarily cause the task to fail. Here's why:
+- Logging vs Exceptions:  logging.error is primarily used for recording error messages during program execution. It doesn't inherently trigger task failures. Exceptions, on the other hand, are designed to signal errors that halt program execution.
+- Airflow Task Operators:  Airflow tasks are typically implemented using operators like PythonOperator, BashOperator, etc. These operators capture the exit code of the underlying process (Python script, bash command, etc.) launched by the task.
+
+:white_check_mark: 3-How do you combine string and a value in the logging ?
+```
+    logging.info(f"{string_to_log} Goodbye!")
+```
+
+f-string info and example: [here](https://builtin.com/data-science/python-f-string)
+
+4-Modify the code so `create_first_string` return a string and `final_string_log` log it.
+```
+<TODO>
+```
+
+:white_check_mark: 5-Why do you need to break code into task in Airflow?
+
+**Improved Modularity and Maintainability:**
+- Smaller, focused tasks: Breaking down a large workflow into smaller, well-defined tasks makes your DAG easier to understand, maintain, and modify. You can focus on changing specific tasks without affecting the entire workflow.
+- Reusability: Smaller tasks can be reused across different DAGs, promoting code reuse and reducing redundancy.
+
+**Enhanced Control and Monitoring:**
+- Independent execution: Tasks can be run independently, allowing for better parallelization and improved performance for large workflows.
+- Granular monitoring: You can monitor the status and progress of individual tasks within the DAG, making it easier to identify and troubleshoot any issues.
+- Task dependencies: Define clear dependencies between tasks, ensuring tasks are executed in the correct order and only when their prerequisites are met.
+
+**Error Handling and Retries:**
+- Isolate failures: If a task fails, it won't necessarily bring down the entire DAG. You can configure retries for individual tasks, allowing them to automatically recover from transient errors.
+- Easier debugging: By isolating failures to specific tasks, it's easier to debug and fix the issue without needing to restart the entire workflow.
+
+**Scalability and Performance:**
+- Parallelization: Breaking down complex tasks allows for parallelizing some or all of the tasks in your DAG, leading to faster execution for large workflows.
+- Distributed execution: Airflow can be configured to run tasks on different workers, further improving scalability for resource-intensive workflows.
+
+Overall, breaking down a DAG into multiple tasks makes your Airflow workflows more manageable, maintainable, and scalable.
+
+:white_check_mark: 6-Can I use it for a really large dataframe for example ?
+
+It's generally not recommended to pass large amounts of data directly between tasks in Airflow using XComs (Airflow's built-in mechanism for sharing data between tasks). Here's why:
+
+Limitations of XComs:
+- Size limitations: XComs have a size limit (configurable, but typically in the megabyte range). Transferring large datasets can easily exceed this limit.
+- Performance overhead: Serializing and deserializing large data objects for XCom storage can be slow and impact the performance of your DAG.
+- Scalability issues: When dealing with large data volumes, Airflow workers might struggle to handle the XCom storage and retrieval.
+
+:white_check_mark: 7-Is it better to save it locally in a file, for a dataframe with df.to_csv() ?
+
+The file will be store in the Airflow machine, if you don't have access to the Airflow machine where the file is stored, then saving it locally won't work.
+If you data is large and you need to break the dag into task, temporarly saving it to a cloud storage (S3, GCP storage) can be a solution.
+
+Make sure to have regular cleaning to avoid cluttering, you can set up automatic deletion, or overwrite the file each time (depends on you need to keep the history).
