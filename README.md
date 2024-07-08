@@ -45,6 +45,6 @@ dags:
 
 Subjects:
 
-- libraries managements
+- libraries management
 - github good practices
 - import management
