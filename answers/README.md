@@ -149,15 +149,21 @@ Logging libraries offer features like different logging levels (error, warning, 
 Logs can be formatted to include additional information like timestamps, thread names, and custom details.
 Logs can be directed to different destinations based on their severity or purpose.
 
-:white_check_mark: x-using logging add - error
+:white_check_mark: 2-using logging add - error Compare the formatting in the logs
 
-:white_check_mark: x-How do you combine string and a value in the logging?
+<TODO>
+
+:white_check_mark: 3-How do you combine string and a value in the logging ?
 ```
     logging.info(f"{string_to_log} Goodbye!")
 ```
 f-string info and example: [here](https://builtin.com/data-science/python-f-string)
 
-:white_check_mark: x-Why do you need to break code into task in Airflow?
+:white_check_mark: 4-Modify the code so create_first_string return a string and final_string_log print it.
+
+<TODO>
+
+:white_check_mark: 5-Why do you need to break code into task in Airflow?
 
 **Improved Modularity and Maintainability:**
 - Smaller, focused tasks: Breaking down a large workflow into smaller, well-defined tasks makes your DAG easier to understand, maintain, and modify. You can focus on changing specific tasks without affecting the entire workflow.
@@ -178,7 +184,7 @@ f-string info and example: [here](https://builtin.com/data-science/python-f-stri
 
 Overall, breaking down a DAG into multiple tasks makes your Airflow workflows more manageable, maintainable, and scalable.
 
-:white_check_mark: x-Can I use it for a really large dataframe for example ?
+:white_check_mark: 6-Can I use it for a really large dataframe for example ?
 
 It's generally not recommended to pass large amounts of data directly between tasks in Airflow using XComs (Airflow's built-in mechanism for sharing data between tasks). Here's why:
 
@@ -187,7 +193,7 @@ Limitations of XComs:
 - Performance overhead: Serializing and deserializing large data objects for XCom storage can be slow and impact the performance of your DAG.
 - Scalability issues: When dealing with large data volumes, Airflow workers might struggle to handle the XCom storage and retrieval.
 
-:white_check_mark: x-Is it better to save it locally in a file, for a dataframe with `df.to_csv()` ?
+:white_check_mark: 7-Is it better to save it locally in a file, for a dataframe with df.to_csv() ?
 
 The file will be store in the Airflow machine, if you don't have access to the Airflow machine where the file is stored, then saving it locally won't work.
 If you data is large and you need to break the dag into task, temporarly saving it to a cloud storage (S3, GCP storage) can be a solution.

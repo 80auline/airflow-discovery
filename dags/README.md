@@ -3,9 +3,9 @@
  - [Questions: :snake: 2_passing_parameters_between_dags ](#item-two)
  
 
- 
+
 <a id="item-one"></a>
-## Questions: :snake: 1_my_first_airflow 
+# Questions: :snake: 1_my_first_airflow 
 
 :pencil2: 1-What are the different tyepe of python documentation ?
 
@@ -67,7 +67,7 @@ Play and modify the `Operator name`, `task_id` and the `python_callable` to full
 :pencil2: 10-Many jobs appearing in Airflow that are not yours (like `example_bash_decorator`). Find the parameters that turn off the example dags in the configs. (Hint: you may have to rebuild the image)
 
 <a id="item-two"></a>
-## Questions: :snake: 2_passing_parameters_between_dags 
+# Questions: :snake: 2_passing_parameters_between_dags 
 
 :pencil2: 1-What it the difference between `print` and `logging` ?
 
