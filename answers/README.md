@@ -149,7 +149,6 @@ Logging libraries offer features like different logging levels (error, warning, 
 Logs can be formatted to include additional information like timestamps, thread names, and custom details.
 Logs can be directed to different destinations based on their severity or purpose.
 
-:white_check_mark: 1-What it the difference between `print` and `logging` ?
 ```
 [2024-07-08, 4:20:07 UTC] {logging_mixin.py:188} INFO - Hello World!
 [2024-07-08, 4:20:07 UTC] {2_passing_parameters_between_dags.py:17} INFO - Hello World!
@@ -170,9 +169,22 @@ Using `logging.error` alone within an Airflow task doesn't necessarily cause the
 
 f-string info and example: [here](https://builtin.com/data-science/python-f-string)
 
-4-Modify the code so `create_first_string` return a string and `final_string_log` log it.
+:white_check_mark: 4-Modify the code so `create_first_string` return a string and `final_string_log` log it.
+You can use easy Xcom or 
 ```
-<TODO>
+def create_first_string(ti): # Modified
+    """Create a first string and return it"""
+    beginning_string = "Hello World!"
+    ti.xcom_push(key="key_beginning_string", value=beginning_string) # New
+    return beginning_string
+
+
+def final_string_log(ti): # Modified
+    """Add content to string and log it"""
+    beginning_string = ti.xcom_pull(task_ids="create_first_string",key='key_beginning_string')  # New
+    string_to_log = beginning_string + "Goodbye!"
+    logging.info(string_to_log)
+
 ```
 
 :white_check_mark: 5-Why do you need to break code into task in Airflow?
