@@ -94,6 +94,10 @@ How to simplify the line below in only 1 line:
 
 :pencil2: 4-Modify the code so `create_first_string` return a string and `final_string_log` log it.
 
+You can use either Xcom or TaskFlow.
+
+References: [Xcom link 1](https://marclamberti.com/blog/airflow-%20wh/), [Xcom link 2](https://ganguly-04.medium.com/using-xcoms-in-airflow-scenario-based-examples-with-code-2edcd6e10501), [TaskFlow](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/taskflow.html)
+
 :pencil2: 5-Why do you need to break code into task in Airflow?
 
 `1 dag with 1 big task vs 1 dag with multiple task` 
