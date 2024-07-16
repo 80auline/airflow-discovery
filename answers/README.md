@@ -170,7 +170,10 @@ Using `logging.error` alone within an Airflow task doesn't necessarily cause the
 f-string info and example: [here](https://builtin.com/data-science/python-f-string)
 
 :white_check_mark: 4-Modify the code so `create_first_string` return a string and `final_string_log` log it.
-You can use easy Xcom or 
+
+You can use either Xcom or TaskFlow.
+
+References: [Xcom link 1](https://marclamberti.com/blog/airflow-%20wh/), [Xcom link 2](https://ganguly-04.medium.com/using-xcoms-in-airflow-scenario-based-examples-with-code-2edcd6e10501), [TaskFlow](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/taskflow.html)
 ```
 def create_first_string(ti): # Modified
     """Create a first string and return it"""
@@ -186,6 +189,8 @@ def final_string_log(ti): # Modified
     logging.info(string_to_log)
 
 ```
+
+
 
 :white_check_mark: 5-Why do you need to break code into task in Airflow?
 
