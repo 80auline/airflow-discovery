@@ -1,6 +1,7 @@
  # Table of content:
  - [Answers: :snake: 1_my_first_airflow ](#item-one)
  - [Answers: :snake: 2_passing_parameters_between_dags ](#item-two)
+ - [Answers: :snake: 3_job_using_macro ](#item-three)
  
 
  
@@ -228,3 +229,151 @@ The file will be store in the Airflow machine, if you don't have access to the A
 If you data is large and you need to break the dag into task, temporarly saving it to a cloud storage (S3, GCP storage) can be a solution.
 
 Make sure to have regular cleaning to avoid cluttering, you can set up automatic deletion, or overwrite the file each time (depends on you need to keep the history).
+
+
+
+<a id="item-three"></a>
+# Answers: :snake: 3_job_using_macro 
+
+:white_check_mark: 1-Open the [Macros Doc](https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html) and play with the variable, run the job and see what you get from the log. Print the logs below.
+
+```
+[2024-07-13, 07:23:06 UTC] {3_macros_job.py:18} INFO - Hello World! 
+        The macros is: 2024-07-23T07:23:04.803334+00:00
+```
+
+```
+[2024-07-13, 07:24:51 UTC] {3_macros_job.py:18} INFO - Hello World! 
+        The macros is: 2024-07-23
+```
+
+```
+[2024-07-13, 07:26:36 UTC] {3_macros_job.py:18} INFO - Hello World! 
+        The macros is: 20240723T072635
+```
+
+ps: we will focus in this part around ts and ds, other varible specificity will not be covered.
+
+:white_check_mark: 2-Change the scheduling to every 5 minutes, compare it with the run timestamp and understand how the `ts` variable behave. You can also change the scheduling to every 10 minutes and see if the behaviour you understood is correct.
+
+```
+[2024-07-23, 07:30:01 UTC] {3_macros_job.py:18} INFO - Hello World! 
+        The macros is: 2024-07-23T07:25:00+00:00
+```
+
+```
+[2024-07-23, 07:35:00 UTC] {3_macros_job.py:18} INFO - Hello World! 
+        The macros is: 2024-07-23T07:30:00+00:00
+```
+
+```
+[2024-07-23, 07:40:01 UTC] {3_macros_job.py:18} INFO - Hello World! 
+        The macros is: 2024-07-23T07:35:00+00:00
+```
+
+`ts` provides a timestamp, it doesn't represent the exact start of the task's execution, you need to substract the scheduling frequency.
+
+:white_check_mark: 3-Macros and dag failure: Add a line to make the dag fail, then fix the code and clear the dag (use `clear` instead of trigger). 
+
+Is the macro variable the correct value you expected or it changed due to the failure ?
+
+The macro is correct, the failure did not have an impact on the value.
+
+:white_check_mark: 4-What is incremental load vs full load in the context of an ETL ?
+
+**Full Load**
+
+A full load in ETL (Extract, Transform, Load) involves loading the entire dataset from the source system into the target system. This is like copying all the files from one folder to another.
+- **Pros**: Simple to implement, ensures data consistency.
+- **Cons**: Resource-intensive, time-consuming, especially for large datasets.
+
+**Incremental Load**
+
+An incremental load only loads the changes that have occurred in the source data since the last load. It's like only copying the new or modified files from one folder to another.
+- **Pros**: Faster, more efficient, reduces system load.
+- **Cons**: Requires tracking changes in the source system, can be more complex to implement.
+
+
+When to Use Which:
+
+**Full Load**
+- Initial data load into a new target system.
+- When data volume is relatively small.
+- When data changes infrequently.
+
+**Incremental Load**:
+- Large datasets with frequent updates.
+- Real-time or near-real-time data processing.
+- When data consistency is critical and you need to reflect changes quickly.
+
+
+:white_check_mark: 5-Let's say that now the variable is used to run a sql query in a daily fashion and we use `ds` as a filtering variable. 
+
+Code:
+```
+def string_with_macro(macro_variable):
+    """Get the macro and print it
+    """
+    sql_to_execute = f"""
+        SELECT 
+            order_id
+            , customer_id 
+            , item_name
+            , catalog_category
+        FROM `events_production.order_created`
+        WHERE events >= DATE('{macro_variable}')"""
+    logging.info(sql_to_execute)
+```
+
+
+What is the difference between using `CURRENT_DATE()`, like in the following code ?
+
+Code:
+```
+def string_with_macro(macro_variable):
+    """Get the macro and print it
+    """
+    sql_to_execute = f"""
+        SELECT 
+            order_id
+            , customer_id 
+            , item_name
+            , catalog_category
+        FROM `events_production.order_created`
+        WHERE events >= CURRENT_DATE()"""
+    logging.info(sql_to_execute)
+```
+
+**Airflow Macros**: Airflow macros provide dynamic values that are evaluated at runtime, allowing you to create flexible and adaptable DAGs.
+
+**SQL CURRENT_DATE()**: Returns the current date within the database at the time the SQL query is executed.
+
+:white_check_mark: 6-Sql execution and failure: We have a ETL job running a sql query every day at 8am where data from yesterday is processed. 
+
+The job fails and it take you hours to debug it, you finally find the error and push you code at 1am (next day). You rerun the task that failed. 
+
+Use your understanding to fill the last line for each case below.
+
+`ds`
+```
+2024-02-02 08:00:00: filtering events_ts >= 2024-02-01 successful
+2024-02-03 08:00:00: filtering events_ts >= 2024-02-02 successful
+2024-02-04 08:00:00: filtering events_ts >= 2024-02-03 successful
+2024-02-05 08:00:00: filtering events_ts >= 2024-02-04 FAILED
+2024-02-06 01:00:00: filtering events_ts >= 2024-02-04 successful
+```
+
+`CURRENT_DATE`
+```
+2024-02-02 08:00:00: filtering events_ts >= (2024-02-02 - 1 day) successful
+2024-02-03 08:00:00: filtering events_ts >= (2024-02-03 - 1 day) successful
+2024-02-04 08:00:00: filtering events_ts >= (2024-02-04 - 1 day) successful
+2024-02-05 08:00:00: filtering events_ts >= (2024-02-05 - 1 day) FAILED
+2024-02-06 01:00:00: filtering events_ts >= (2024-02-06 - 1 day) successful
+```
+
+`ds` -> events_ts >= 2024-02-04
+
+`CURRENT_DATE` ->  filtering events_ts >= 2024-02-05
+
+With Current data you will have process more data that you should. These data will be processed again at 8am when you normal scheduling gets trigger. If you did not take this into consideration when designing your ETL you can face duplicated data in your table. 

@@ -1,6 +1,7 @@
  # Table of content:
  - [Questions: :snake: 1_my_first_airflow ](#item-one)
  - [Questions: :snake: 2_passing_parameters_between_dags ](#item-two)
+ - [Questions: :snake: 3_job_using_macro ](#item-three)
  
 
 
@@ -109,7 +110,86 @@ References: [Xcom link 1](https://marclamberti.com/blog/airflow-%20wh/), [Xcom l
 
 
 
+<a id="item-three"></a>
+# Questions: :snake: 3_job_using_macro 
+
+:pencil2: 1-Open the [Macros Doc](https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html) and play with the variable, run the job and see what you get from the log. 
+
+Print the logs below.
+
+ps: we will focus in this part around ts and ds, other varible specificity will not be covered.
+
+:pencil2: 2-Change the scheduling to every 5 minutes, compare it with the run timestamp and understand how the `ts` variable behave. 
+
+You can also change the scheduling to every 10 minutes and see if the behaviour you understood is correct.
+
+:pencil2: 3-Macros and dag failure: Add a line to make the dag fail, then fix the code and clear the dag (use `clear` instead of trigger). 
+
+Is the macro variable the correct value you expected or it changed due to the failure ?
 
 
+:pencil2: 4-What is incremental load vs full load in the context of an ETL ?
+
+
+:pencil2: 5-Let's say that now the variable is used to run a sql query in a daily fashion and we use `ds` as a filtering variable. 
+
+Code:
+```
+def string_with_macro(macro_variable):
+    """Get the macro and print it
+    """
+    sql_to_execute = f"""
+        SELECT 
+            order_id
+            , customer_id 
+            , item_name
+            , catalog_category
+        FROM `events_production.order_created`
+        WHERE events >= DATE('{macro_variable}')"""
+    logging.info(sql_to_execute)
+```
+
+
+What is the difference between using `CURRENT_DATE()`, like in the following code ?
+
+Code:
+```
+def string_with_macro(macro_variable):
+    """Get the macro and print it
+    """
+    sql_to_execute = f"""
+        SELECT 
+            order_id
+            , customer_id 
+            , item_name
+            , catalog_category
+        FROM `events_production.order_created`
+        WHERE events >= CURRENT_DATE()"""
+    logging.info(sql_to_execute)
+```
+
+:pencil2: 6-Sql execution and failure: We have a ETL job running a sql query every day at 8am where data from yesterday is processed. 
+
+The job fails and it take you hours to debug it, you finally find the error and push you code at 1am (next day). You rerun the task that failed. 
+
+Use your understanding to fill the last line for each case below.
+
+`ds`
+```
+2024-02-02 08:00:00: filtering events_ts >= 2024-02-01 successful
+2024-02-03 08:00:00: filtering events_ts >= 2024-02-02 successful
+2024-02-04 08:00:00: filtering events_ts >= 2024-02-03 successful
+2024-02-05 08:00:00: filtering events_ts >= 2024-02-04 FAILED
+2024-02-06 01:00:00: <to fill - using rerun task not trigger>
+```
+
+`CURRENT_DATE`
+```
+2024-02-02 08:00:00: filtering events_ts >= (2024-02-02 - 1 day) successful
+2024-02-03 08:00:00: filtering events_ts >= (2024-02-03 - 1 day) successful
+2024-02-04 08:00:00: filtering events_ts >= (2024-02-04 - 1 day) successful
+2024-02-05 08:00:00: filtering events_ts >= (2024-02-05 - 1 day) FAILED
+2024-02-06 01:00:00: <to fill - using rerun task not trigger>
+```
 
 
