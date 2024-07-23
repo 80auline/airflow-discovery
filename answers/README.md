@@ -398,15 +398,14 @@ dag = DAG(
 
 You should be redirected to a new page, allowing you to specify a value.
 
-Modify the value with an integer or a string and see what is displayed in the logs.
+Modify the value with an `integer` or a `string` and see what is displayed in the logs.
 
 ```
 [2024-07-23, 08:37:00 UTC] {4_passing_parameters_on_trigger.py:18} INFO - Hello World! 
     Manual Trigerring with Params: {'my_param': 10}
 ```
 
-You can not use a string, because the default value provided `6` induce that the type expected is an integer.
-Float do not work neither.
+You can not use a string, because the default value provided is `6`, the code induce that the type expected is an integer. Float do not work neither.
 
 :pencil2: 2-Explicitly define the type of the variable and a default value.
 
@@ -417,6 +416,7 @@ Float do not work neither.
     }
 ```
 
+Logs
 ```
 [2024-07-23, 08:50:02 UTC] {4_passing_parameters_on_trigger.py:18} INFO - Hello World! 
     Manual Trigerring with Params: {'int_param': 10, 'string_param': '5'}
@@ -427,7 +427,7 @@ Float do not work neither.
     Manual Trigerring with Params: {'int_param': 1000, 'string_param': 'test'}
 ```
 
-:pencil2: 3-For the integer add a minimum and a maximum.
+:pencil2: 3-For the integer parameter add a minimum and a maximum.
 
 ```
     params={
@@ -442,12 +442,13 @@ Float do not work neither.
 def string_with_params(**context):
     """Get the macro and print it"""
     string_params = f"""Hello World! 
-    Manual Trigerring with Params: {context["params"]}
-    My int_param is <to_fill>
-    My string_param is <to_fill>"""
+        Manual Trigerring with Params: {context["params"]}
+        My int_param is <to_fill>
+        My string_param is <to_fill>"""
     logging.info(string_params)
 ```
 
+Code
 ```
 def string_with_params(**context):
     """Get the macro and print it"""
@@ -458,6 +459,7 @@ def string_with_params(**context):
     logging.info(string_params)
 ```
 
+Logs
 ```
 [2024-07-23, 08:54:29 UTC] {4_passing_parameters_on_trigger.py:20} INFO - Hello World! 
     Manual Trigerring with Params: {'int_param': 10, 'string_param': '5'}
@@ -468,13 +470,12 @@ def string_with_params(**context):
 
 :pencil2: 5-Build a code to run a sql, the filter should be conditional to a parameter. 
 
-daily_load: normal behaviour, sql filter is build using the `ds` macro.
-backfill_date: manual trigerring, sql filter is overwritten with the date provided.
+**daily_load**: normal behaviour, sql filter is build using the `ds` macro.
+
+**backfill_date**: manual trigerring, sql filter is overwritten with the date provided.
 
 ```
 def string_with_params(macro_variable, **context):
-    """Get the macro and print it"""
-
     if context["params"]["job_mode"] == "daily_run":
         date_filter = macro_variable
     elif context["params"]["job_mode"] == "backfill_run":
@@ -503,7 +504,7 @@ dag = DAG(
 )
 ```
 
-`Daily Load`
+Logs for `Daily Load`
 ```
 [2024-07-23, 09:10:19 UTC] {4_passing_parameters_on_trigger.py:30} INFO - 
         SELECT 
@@ -515,7 +516,7 @@ dag = DAG(
         WHERE events >= DATE('2024-07-23')
 ```
 
-`Backfilling`
+Logs for `Backfilling`
 ```
 [2024-07-23, 09:11:13 UTC] {4_passing_parameters_on_trigger.py:30} INFO - 
         SELECT 
@@ -527,8 +528,8 @@ dag = DAG(
         WHERE events >= DATE('2024-01-01')
 ```
 
-:pencil2: 6-Do you see a disaventage of doing this
+:pencil2: 6-Do you see disaventages of doing this way ?
 
 In the interface there is not way to see if it was a daily load or a backfill, you need to go to the logs to see it.
 
-For daily load, a date parameter is given but not used during the daily load, it can be source of confusion.
+A date parameter is given but not used in the daily load, it can be source of confusion.
