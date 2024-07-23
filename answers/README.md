@@ -267,16 +267,14 @@ The macro is correct, the failure did not have an impact on the value.
 **Full Load**
 
 A full load in ETL (Extract, Transform, Load) involves loading the entire dataset from the source system into the target system. This is like copying all the files from one folder to another.
-
-**Pros**: Simple to implement, ensures data consistency.
-**Cons**: Resource-intensive, time-consuming, especially for large datasets.
+- **Pros**: Simple to implement, ensures data consistency.
+- **Cons**: Resource-intensive, time-consuming, especially for large datasets.
 
 **Incremental Load**
 
 An incremental load only loads the changes that have occurred in the source data since the last load. It's like only copying the new or modified files from one folder to another.
-
-**Pros**: Faster, more efficient, reduces system load.
-**Cons**: Requires tracking changes in the source system, can be more complex to implement.
+- **Pros**: Faster, more efficient, reduces system load.
+- **Cons**: Requires tracking changes in the source system, can be more complex to implement.
 
 
 When to Use Which:
@@ -361,4 +359,4 @@ Use your understanding to fill the last line for each case below.
 
 `CURRENT_DATE` ->  filtering events_ts >= 2024-02-05
 
-With Current data you will have process more data that you should. These data will be processed again at 8am when you normal scheduling get trigger. If you did not take this into consideration when designing your ETL you can face duplicates. 
+With Current data you will have process more data that you should. These data will be processed again at 8am when you normal scheduling gets trigger. If you did not take this into consideration when designing your ETL you can face duplicated data in your table. 
