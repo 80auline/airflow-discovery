@@ -256,7 +256,7 @@ ps: we will focus in this part around ts and ds, other varible specificity will 
 
 `ts` provides a timestamp, it doesn't represent the exact start of the task's execution, you need to substract the scheduling frequency.
 
-:white_check_mark: 3-Macros and dag failure: Add a line to make the dag fail, then fix the code and clear the dag (use clear instead of trigger). 
+:white_check_mark: 3-Macros and dag failure: Add a line to make the dag fail, then fix the code and clear the dag (use `clear` instead of trigger). 
 
 Is the macro variable the correct value you expected or it changed due to the failure ?
 
@@ -265,12 +265,14 @@ The macro is correct, the failure did not have an impact on the value.
 :white_check_mark: 4-What is incremental load vs full load in the context of an ETL ?
 
 **Full Load**
+
 A full load in ETL (Extract, Transform, Load) involves loading the entire dataset from the source system into the target system. This is like copying all the files from one folder to another.
 
 **Pros**: Simple to implement, ensures data consistency.
 **Cons**: Resource-intensive, time-consuming, especially for large datasets.
 
 **Incremental Load**
+
 An incremental load only loads the changes that have occurred in the source data since the last load. It's like only copying the new or modified files from one folder to another.
 
 **Pros**: Faster, more efficient, reduces system load.
@@ -278,10 +280,12 @@ An incremental load only loads the changes that have occurred in the source data
 
 
 When to Use Which:
+
 **Full Load**
 - Initial data load into a new target system.
 - When data volume is relatively small.
 - When data changes infrequently.
+
 **Incremental Load**:
 - Large datasets with frequent updates.
 - Real-time or near-real-time data processing.
@@ -326,9 +330,14 @@ def string_with_macro(macro_variable):
 ```
 
 **Airflow Macros**: Airflow macros provide dynamic values that are evaluated at runtime, allowing you to create flexible and adaptable DAGs.
+
 **SQL CURRENT_DATE()**: Returns the current date within the database at the time the SQL query is executed.
 
-:white_check_mark: 6-Sql execution and failure: We have a ETL job running a sql query every day at 8am where data from yesterday is processed. The job fails and it take you hours to debug it, you finally find the error and push you code at 1am (next day). You rerun the task that failed. Use your understanding to fill the last line for each case below.
+:white_check_mark: 6-Sql execution and failure: We have a ETL job running a sql query every day at 8am where data from yesterday is processed. 
+
+The job fails and it take you hours to debug it, you finally find the error and push you code at 1am (next day). You rerun the task that failed. 
+
+Use your understanding to fill the last line for each case below.
 
 `ds`
 ```
@@ -349,5 +358,7 @@ def string_with_macro(macro_variable):
 ```
 
 `ds` -> events_ts >= 2024-02-04
+
 `CURRENT_DATE` ->  filtering events_ts >= 2024-02-05
+
 With Current data you will have process more data that you should. These data will be processed again at 8am when you normal scheduling get trigger. If you did not take this into consideration when designing your ETL you can face duplicates. 

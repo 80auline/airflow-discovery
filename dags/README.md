@@ -109,13 +109,17 @@ How to simplify the line below in only 1 line:
 <a id="item-three"></a>
 # Questions: :snake: 3_job_using_macro 
 
-:pencil2: 1-Open the [Macros Doc](https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html) and play with the variable, run the job and see what you get from the log. Print the logs below.
+:pencil2: 1-Open the [Macros Doc](https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html) and play with the variable, run the job and see what you get from the log. 
+
+Print the logs below.
 
 ps: we will focus in this part around ts and ds, other varible specificity will not be covered.
 
-:pencil2: 2-Change the scheduling to every 5 minutes, compare it with the run timestamp and understand how the `ts` variable behave. You can also change the scheduling to every 10 minutes and see if the behaviour you understood is correct.
+:pencil2: 2-Change the scheduling to every 5 minutes, compare it with the run timestamp and understand how the `ts` variable behave. 
 
-:pencil2: 3-Macros and dag failure: Add a line to make the dag fail, then fix the code and clear the dag (use clear instead of trigger). 
+You can also change the scheduling to every 10 minutes and see if the behaviour you understood is correct.
+
+:pencil2: 3-Macros and dag failure: Add a line to make the dag fail, then fix the code and clear the dag (use `clear` instead of trigger). 
 
 Is the macro variable the correct value you expected or it changed due to the failure ?
 
@@ -160,7 +164,11 @@ def string_with_macro(macro_variable):
     logging.info(sql_to_execute)
 ```
 
-:pencil2: 6-Sql execution and failure: We have a ETL job running a sql query every day at 8am where data from yesterday is processed. The job fails and it take you hours to debug it, you finally find the error and push you code at 1am (next day). You rerun the task that failed. Use your understanding to fill the last line for each case below.
+:pencil2: 6-Sql execution and failure: We have a ETL job running a sql query every day at 8am where data from yesterday is processed. 
+
+The job fails and it take you hours to debug it, you finally find the error and push you code at 1am (next day). You rerun the task that failed. 
+
+Use your understanding to fill the last line for each case below.
 
 `ds`
 ```
