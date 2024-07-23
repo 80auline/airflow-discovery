@@ -2,7 +2,7 @@
  - [Answers: :snake: 1_my_first_airflow ](#item-one)
  - [Answers: :snake: 2_passing_parameters_between_dags ](#item-two)
  - [Answers: :snake: 3_job_using_macro ](#item-three)
- 
+ - [Answers: :snake: 4_passing_parameters_on_trigger ](#item-four)
 
  
 <a id="item-one"></a>
@@ -377,3 +377,169 @@ Use your understanding to fill the last line for each case below.
 `CURRENT_DATE` ->  filtering events_ts >= 2024-02-05
 
 With Current data you will have process more data that you should. These data will be processed again at 8am when you normal scheduling gets trigger. If you did not take this into consideration when designing your ETL you can face duplicated data in your table. 
+
+
+<a id="item-four"></a>
+# Answers: :snake: 4_passing_parameters_on_trigger
+
+:white_check_mark: 1-Trigger manually the job, then modify the following line and trigger manually the job again. 
+
+```
+dag = DAG(
+    f"4_passing_parameters",
+    schedule_interval=None,
+    start_date=datetime(2024, 1, 1),
+    catchup=False,
+    params={
+        "my_param": 6 # New
+    }
+)
+````
+
+You should be redirected to a new page, allowing you to specify a value.
+
+Modify the value with an `integer` or a `string` and see what is displayed in the logs.
+
+```
+[2024-07-23, 08:37:00 UTC] {4_passing_parameters_on_trigger.py:18} INFO - Hello World! 
+    Manual Trigerring with Params: {'my_param': 10}
+```
+
+You can not use a string, because the default value provided is `6`, the code induce that the type expected is an integer. Float do not work neither.
+
+:white_check_mark: 2-Explicitly define the type of the variable and a default value.
+
+```
+    params={
+        "int_param": Param(10, type="integer"),
+        "string_param": Param(5, type="string")
+    }
+```
+
+Logs
+```
+[2024-07-23, 08:50:02 UTC] {4_passing_parameters_on_trigger.py:18} INFO - Hello World! 
+    Manual Trigerring with Params: {'int_param': 10, 'string_param': '5'}
+```
+
+```
+[2024-07-23, 08:50:49 UTC] {4_passing_parameters_on_trigger.py:18} INFO - Hello World! 
+    Manual Trigerring with Params: {'int_param': 1000, 'string_param': 'test'}
+```
+
+:white_check_mark: 3-For the integer parameter add a minimum and a maximum.
+
+```
+    params={
+        "int_param": Param(10, type="integer", minimum=0, maximum=20),
+        "string_param": Param(5, type="string")
+    }
+```
+
+:white_check_mark: 4-Modify the code `string_with_params` function to grab the value directly.
+
+```
+def string_with_params(**context):
+    """Get the macro and print it"""
+    string_params = f"""Hello World! 
+        Manual Trigerring with Params: {context["params"]}
+        My int_param is <to_fill>
+        My string_param is <to_fill>"""
+    logging.info(string_params)
+```
+
+Code
+```
+def string_with_params(**context):
+    """Get the macro and print it"""
+    string_params = f"""Hello World! 
+    Manual Trigerring with Params: {context["params"]}
+    My int_param is {context["params"]["int_param"]}
+    My string_param is {context["params"]["string_param"]}"""
+    logging.info(string_params)
+```
+
+Logs
+```
+[2024-07-23, 08:54:29 UTC] {4_passing_parameters_on_trigger.py:20} INFO - Hello World! 
+    Manual Trigerring with Params: {'int_param': 10, 'string_param': '5'}
+    My int_param is 10
+    My string_param is 5
+
+```
+
+:white_check_mark: 5-Build a code to run a sql, the filter should be conditional to a parameter. 
+
+**daily_load**: normal behaviour, sql filter is build using the `ds` macro.
+
+**backfill_date**: manual trigerring, sql filter is overwritten with the date provided.
+
+```
+def string_with_params(macro_variable, **context):
+    if context["params"]["job_mode"] == "daily_run":
+        date_filter = macro_variable
+    elif context["params"]["job_mode"] == "backfill_run":
+        date_filter = context["params"]["backfill_date"]
+
+    sql_to_execute = f"""
+        SELECT 
+            order_id
+            , customer_id 
+            , item_name
+            , catalog_category
+        FROM `events_production.order_created`
+        WHERE events >= DATE('{date_filter}')"""
+    logging.info(sql_to_execute)
+
+
+dag = DAG(
+    f"4_passing_parameters",
+    schedule_interval=None,
+    start_date=datetime(2024, 1, 1),
+    catchup=False,
+    params={
+        "job_mode": Param("daily_run", enum=["daily_run", "backfill_run"]),
+        "backfill_date": Param(f"1999-01-01", type="string", format="date") # Only used when backfill is triggered
+    }
+)
+
+with dag:
+
+    string_with_params_op = PythonOperator(
+        task_id='string_with_params',
+        python_callable=string_with_params,
+        op_kwargs={
+            "macro_variable": "{{ ds }}"
+        }
+    )
+```
+
+Logs for `Daily Load`
+```
+[2024-07-23, 09:10:19 UTC] {4_passing_parameters_on_trigger.py:30} INFO - 
+        SELECT 
+            order_id
+            , customer_id 
+            , item_name
+            , catalog_category
+        FROM `events_production.order_created`
+        WHERE events >= DATE('2024-07-23')
+```
+
+Logs for `Backfilling`
+```
+[2024-07-23, 09:11:13 UTC] {4_passing_parameters_on_trigger.py:30} INFO - 
+        SELECT 
+            order_id
+            , customer_id 
+            , item_name
+            , catalog_category
+        FROM `events_production.order_created`
+        WHERE events >= DATE('2024-01-01')
+```
+
+:white_check_mark: 6-Do you see disaventages of doing this way ?
+
+In the interface there is not way to see if it was a daily load or a backfill, you need to go to the logs to see it.
+
+A date parameter is given but not used in the daily load, it can be source of confusion.

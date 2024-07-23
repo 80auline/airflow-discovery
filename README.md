@@ -36,14 +36,13 @@ The Airflow [community](https://airflow.apache.org/community/) on slack is a gre
 ## What's next in the pipeline? 
 
 dags:
-- 3_macros_job.py
-- 4_passing_parameters_on_trigger.py 
 - 5_branching_task_and_skipping.py
+- 6_taskflow.py
 
 Subjects:
 - libraries management
 - Github good practices
 - import management
 - Flower
-- Docker and &
+- Docker
 - Github Actions

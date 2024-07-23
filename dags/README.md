@@ -2,6 +2,7 @@
  - [Questions: :snake: 1_my_first_airflow ](#item-one)
  - [Questions: :snake: 2_passing_parameters_between_dags ](#item-two)
  - [Questions: :snake: 3_job_using_macro ](#item-three)
+ - [Questions: :snake: 4_passing_parameters_on_trigger ](#item-four)
  
 
 
@@ -192,4 +193,100 @@ Use your understanding to fill the last line for each case below.
 2024-02-06 01:00:00: <to fill - using rerun task not trigger>
 ```
 
+<a id="item-four"></a>
+# Questions: :snake: 4_passing_parameters_on_trigger
 
+:pencil2: 1-Trigger manually the job, then modify the following line and trigger manually the job again. 
+
+```
+dag = DAG(
+    f"4_passing_parameters",
+    schedule_interval=None,
+    start_date=datetime(2024, 1, 1),
+    catchup=False,
+    params={
+        "my_param": 6 # New
+    }
+)
+````
+
+You should be redirected to a new page, allowing you to specify a value.
+
+Modify the value with an `integer` or a `string` and see what is displayed in the logs.
+
+
+:pencil2: 2-Explicitly define the type of the variable and a default value.
+
+```
+    params={
+        "int_param": <to fill>,
+        "string_param": <to fill>
+    }
+```
+
+:pencil2: 3-For the integer parameter add a minimum and a maximum.
+
+```
+    params={
+        "int_param": Param(10, type="integer", <to fill>),
+        "string_param": Param(5, type="string")
+    }
+```
+
+:pencil2: 4-Modify the code `string_with_params` function to grab the value directly.
+
+```
+def string_with_params(**context):
+    """Get the macro and print it"""
+    string_params = f"""Hello World! 
+        Manual Trigerring with Params: {context["params"]}
+        My int_param is <to_fill>
+        My string_param is <to_fill>"""
+    logging.info(string_params)
+```
+
+:pencil2: 5-Build a code to run a sql, the filter should be conditional to a parameter. 
+
+**daily_load**: normal behaviour, sql filter is build using the `ds` macro.
+
+**backfill_date**: manual trigerring, sql filter is overwritten with the date provided.
+
+```
+def string_with_params(macro_variable, **context):
+    # TODO: check job_mode given and adjust date_filter value
+
+    sql_to_execute = f"""
+        SELECT 
+            order_id
+            , customer_id 
+            , item_name
+            , catalog_category
+        FROM `events_production.order_created`
+        WHERE events >= DATE('{date_filter}')"""
+    logging.info(sql_to_execute)
+
+
+dag = DAG(
+    f"4_passing_parameters",
+    schedule_interval=None,
+    start_date=datetime(2024, 1, 1),
+    catchup=False,
+    params={
+        "job_mode": <to fill - should be a enum with 2 values daily_run and backfill_run>
+        "backfill_date": <to fill - should be a date> # Only used when backfill is triggered
+    }
+
+with dag:
+
+    string_with_params_op = PythonOperator(
+        task_id='string_with_params',
+        python_callable=string_with_params,
+        op_kwargs={
+            "macro_variable": "<to fill with ds macro>"
+        }
+    )
+)
+```
+
+
+:pencil2: 6-Do you see disaventages of doing this way ?
