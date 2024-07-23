@@ -382,7 +382,7 @@ With Current data you will have process more data that you should. These data wi
 <a id="item-four"></a>
 # Answers: :snake: 4_passing_parameters_on_trigger
 
-:pencil2: 1-Trigger manually the job, then modify the following line and trigger manually the job again. 
+:white_check_mark: 1-Trigger manually the job, then modify the following line and trigger manually the job again. 
 
 ```
 dag = DAG(
@@ -407,7 +407,7 @@ Modify the value with an `integer` or a `string` and see what is displayed in th
 
 You can not use a string, because the default value provided is `6`, the code induce that the type expected is an integer. Float do not work neither.
 
-:pencil2: 2-Explicitly define the type of the variable and a default value.
+:white_check_mark: 2-Explicitly define the type of the variable and a default value.
 
 ```
     params={
@@ -427,7 +427,7 @@ Logs
     Manual Trigerring with Params: {'int_param': 1000, 'string_param': 'test'}
 ```
 
-:pencil2: 3-For the integer parameter add a minimum and a maximum.
+:white_check_mark: 3-For the integer parameter add a minimum and a maximum.
 
 ```
     params={
@@ -436,7 +436,7 @@ Logs
     }
 ```
 
-:pencil2: 4-Modify the code `string_with_params` function to grab the value directly.
+:white_check_mark: 4-Modify the code `string_with_params` function to grab the value directly.
 
 ```
 def string_with_params(**context):
@@ -468,7 +468,7 @@ Logs
 
 ```
 
-:pencil2: 5-Build a code to run a sql, the filter should be conditional to a parameter. 
+:white_check_mark: 5-Build a code to run a sql, the filter should be conditional to a parameter. 
 
 **daily_load**: normal behaviour, sql filter is build using the `ds` macro.
 
@@ -502,6 +502,16 @@ dag = DAG(
         "backfill_date": Param(f"1999-01-01", type="string", format="date") # Only used when backfill is triggered
     }
 )
+
+with dag:
+
+    string_with_params_op = PythonOperator(
+        task_id='string_with_params',
+        python_callable=string_with_params,
+        op_kwargs={
+            "macro_variable": "{{ ds }}"
+        }
+    )
 ```
 
 Logs for `Daily Load`
@@ -528,7 +538,7 @@ Logs for `Backfilling`
         WHERE events >= DATE('2024-01-01')
 ```
 
-:pencil2: 6-Do you see disaventages of doing this way ?
+:white_check_mark: 6-Do you see disaventages of doing this way ?
 
 In the interface there is not way to see if it was a daily load or a backfill, you need to go to the logs to see it.
 
